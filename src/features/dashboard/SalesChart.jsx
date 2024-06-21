@@ -25,7 +25,7 @@ const StyledSalesChart = styled(DashboardBox)`
 
 function SalesChart({ bookings, numDays }) {
   const { isDarkMode } = useDarkMode();
-  const colors = !isDarkMode
+  const colors = isDarkMode
     ? {
         totalSales: { stroke: "#4f46e5", fill: "#4f46e5" },
         extrasSales: { stroke: "#22c55e", fill: "#22c55e" },
