@@ -12,8 +12,6 @@ export async function getCabins() {
 }
 
 export async function addEditCabins(formData, editId) {
-  // https://zaaopnogqwbkasyujppf.supabase.co/storage/v1/object/public/cabin-images/cabin-001.jpg
-
   const hasImagePath = formData.image?.startsWith?.(
     import.meta.env.VITE_SUPABASE_URL
   );

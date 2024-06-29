@@ -3,18 +3,21 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-import Textarea from "../../ui/Textarea";
+import FormSelect from "../../ui/FormSelect";
+import { countryInfo } from "../../utils/countryData";
+import { useCreateGuest } from "./useCreateGuest";
 
 function GuestForm({ cabinToEdit = {}, closeModal }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
+
+  const { createGuestMutate, isAdding } = useCreateGuest();
 
   //   const { createCabinMutate, isAdding } = useCreateCabin();
   //   const { editCabinMutate, isEditing } = useEditCabin();
   const {
     handleSubmit,
     register,
-    getValues,
     reset,
     formState: { errors },
   } = useForm({
@@ -22,42 +25,21 @@ function GuestForm({ cabinToEdit = {}, closeModal }) {
   });
 
   const onSubmit = (data) => {
-    const image = typeof data.image === "string";
-
-    if (isEditSession) {
-      //   image
-      //     ? editCabinMutate(
-      //         { cabinData: { ...data }, editId },
-      //         {
-      //           onSuccess: () => {
-      //             reset();
-      //             closeModal?.();
-      //           },
-      //         }
-      //       )
-      //     : editCabinMutate(
-      //         { cabinData: { ...data, image: data.image[0] }, editId },
-      //         {
-      //           onSuccess: () => {
-      //             reset();
-      //             closeModal?.();
-      //           },
-      //         }
-      //       );
-    } else {
-      //   createCabinMutate(
-      //     { ...data, image: data.image[0] },
-      //     {
-      //       onSuccess: () => {
-      //         reset();
-      //         closeModal?.();
-      //       },
-      //     }
-      //   );
-    }
+    createGuestMutate(
+      {
+        ...data,
+        countryFlag: `https://flagcdn.com/${countryInfo[data.nationality]}.svg`,
+      },
+      {
+        onSuccess: () => {
+          reset();
+          closeModal?.();
+        },
+      }
+    );
   };
 
-  const isWorking = false;
+  const isWorking = isAdding;
 
   return (
     <Form
@@ -82,11 +64,11 @@ function GuestForm({ cabinToEdit = {}, closeModal }) {
           placeholder="06231311319"
           {...register("nationalID", {
             required: "This field is required",
-            min: {
+            minLength: {
               value: 10,
               message: "NID shouldn't contain less than 10 digits",
             },
-            max: {
+            maxLength: {
               value: 10,
               message: "NID shouldn't contain more than 10 digits",
             },
@@ -108,6 +90,16 @@ function GuestForm({ cabinToEdit = {}, closeModal }) {
           })}
           placeholder="user@example.com"
         />
+      </FormRow>
+
+      <FormRow label="Nationality" error={errors?.nationality?.message}>
+        <FormSelect defaultValues="Afghanistan" {...register("nationality")}>
+          {Object.keys(countryInfo).map((countryName) => (
+            <option key={countryName} value={countryName}>
+              {countryName}
+            </option>
+          ))}
+        </FormSelect>
       </FormRow>
 
       <FormRow>

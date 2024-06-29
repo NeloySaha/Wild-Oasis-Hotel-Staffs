@@ -29,3 +29,17 @@ export async function getGuests({ sortBy, page }) {
 
   return { data, count };
 }
+
+export async function createGuest(newGuest) {
+  const { data, error } = await supabase
+    .from("guests")
+    .insert([newGuest])
+    .select();
+
+  if (error) {
+    console.log(error);
+    throw new Error("Guests could not be loaded");
+  }
+
+  return data;
+}
