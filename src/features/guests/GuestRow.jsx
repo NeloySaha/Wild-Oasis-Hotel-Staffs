@@ -3,6 +3,9 @@ import Table from "../../ui/Table";
 import { HiPencil, HiTrash } from "react-icons/hi2";
 import Modal from "../../ui/Modal";
 import Menus from "../../ui/Menus";
+import GuestForm from "./GuestForm";
+import { useDeleteGuest } from "./useDeleteGuest";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const GuestName = styled.div`
   font-size: 1.4rem;
@@ -40,9 +43,18 @@ const Email = styled.div`
   font-family: "Sono";
 `;
 
-function GuestRow({
-  guest: { id: guestId, fullName, nationalID, countryFlag, nationality, email },
-}) {
+function GuestRow({ guest }) {
+  const {
+    id: guestId,
+    fullName,
+    nationalID,
+    countryFlag,
+    nationality,
+    email,
+  } = guest;
+
+  const { deleteGuestMutate, isDeleting } = useDeleteGuest();
+
   return (
     <>
       <Table.Row>
@@ -71,19 +83,19 @@ function GuestRow({
                 </Modal.Open>
               </Menus.List>
 
-              {/* <Modal.Window name="edit-guest">
-                <CreateCabinForm cabinToEdit={cabin} />
-              </Modal.Window> */}
+              <Modal.Window name="edit-guest">
+                <GuestForm guestToEdit={guest} />
+              </Modal.Window>
 
-              {/* <Modal.Window name="delete-guest">
+              <Modal.Window name="delete-guest">
                 <ConfirmDelete
-                  resourceName="cabins"
+                  resourceName="guests"
                   onConfirm={() => {
-                    deleteCabinMutation(guestId);
+                    deleteGuestMutate(guestId);
                   }}
-                  disabled={isWorking}
+                  disabled={isDeleting}
                 />
-              </Modal.Window> */}
+              </Modal.Window>
             </Menus.Menu>
           </Modal>
         </div>

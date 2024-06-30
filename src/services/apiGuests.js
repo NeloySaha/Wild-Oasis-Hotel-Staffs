@@ -31,14 +31,38 @@ export async function getGuests({ sortBy, page }) {
 }
 
 export async function createGuest(newGuest) {
-  const { data, error } = await supabase
-    .from("guests")
-    .insert([newGuest])
-    .select();
+  const { data, error } = await supabase.from("guests").insert([newGuest]);
 
   if (error) {
     console.log(error);
     throw new Error("Guests could not be loaded");
+  }
+
+  return data;
+}
+
+export async function editGuest({ editedInfo, editedGuestId }) {
+  const { data, error } = await supabase
+    .from("guests")
+    .update(editedInfo)
+    .eq("id", editedGuestId);
+
+  if (error) {
+    console.log(error);
+    throw new Error("Guest could not be edited");
+  }
+
+  return data;
+}
+
+export async function deleteGuest(id) {
+  const { data, error } = await supabase.from("guests").delete().eq("id", id);
+
+  if (error) {
+    console.log(error);
+    throw new Error(
+      "This guest has some bookings. So, guest can not be deleted!"
+    );
   }
 
   return data;

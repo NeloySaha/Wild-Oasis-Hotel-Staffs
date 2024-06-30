@@ -6,12 +6,14 @@ import Input from "../../ui/Input";
 import FormSelect from "../../ui/FormSelect";
 import { countryInfo } from "../../utils/countryData";
 import { useCreateGuest } from "./useCreateGuest";
+import { useEditGuest } from "./useEditGuest";
 
-function GuestForm({ cabinToEdit = {}, closeModal }) {
-  const { id: editId, ...editValues } = cabinToEdit;
+function GuestForm({ guestToEdit = {}, closeModal }) {
+  const { id: editId, ...editValues } = guestToEdit;
   const isEditSession = Boolean(editId);
 
   const { createGuestMutate, isAdding } = useCreateGuest();
+  const { editGuestMutate, isEditing } = useEditGuest();
 
   //   const { createCabinMutate, isAdding } = useCreateCabin();
   //   const { editCabinMutate, isEditing } = useEditCabin();
@@ -25,21 +27,43 @@ function GuestForm({ cabinToEdit = {}, closeModal }) {
   });
 
   const onSubmit = (data) => {
-    createGuestMutate(
-      {
-        ...data,
-        countryFlag: `https://flagcdn.com/${countryInfo[data.nationality]}.svg`,
-      },
-      {
-        onSuccess: () => {
-          reset();
-          closeModal?.();
+    if (isEditSession) {
+      editGuestMutate(
+        {
+          editedInfo: {
+            ...data,
+            countryFlag: `https://flagcdn.com/${
+              countryInfo[data.nationality]
+            }.svg`,
+          },
+          editedGuestId: editId,
         },
-      }
-    );
+        {
+          onSuccess: () => {
+            reset();
+            closeModal?.();
+          },
+        }
+      );
+    } else {
+      createGuestMutate(
+        {
+          ...data,
+          countryFlag: `https://flagcdn.com/${
+            countryInfo[data.nationality]
+          }.svg`,
+        },
+        {
+          onSuccess: () => {
+            reset();
+            closeModal?.();
+          },
+        }
+      );
+    }
   };
 
-  const isWorking = isAdding;
+  const isWorking = isAdding || isEditing;
 
   return (
     <Form
@@ -61,7 +85,7 @@ function GuestForm({ cabinToEdit = {}, closeModal }) {
           disabled={isWorking}
           type="number"
           id="nationalID"
-          placeholder="06231311319"
+          placeholder="4623131131"
           {...register("nationalID", {
             required: "This field is required",
             minLength: {
