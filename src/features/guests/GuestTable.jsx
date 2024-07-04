@@ -15,8 +15,9 @@ function GuestTable() {
 
   return (
     <Menus>
-      <Table columns="2fr 1.2fr 2.8fr 1.9fr 3.2rem">
+      <Table columns="0.6fr 2fr 1.2fr 2.2fr 1.9fr 3.2rem">
         <Table.Header>
+          <div>ID</div>
           <div>Guest</div>
           <div>National ID</div>
           <div>Country</div>

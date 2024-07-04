@@ -22,16 +22,4 @@ function Guests() {
 
 export default Guests;
 
-{
-  /* <>
-      <Row type="horizontal">
-        <Heading as="h1">All cabins</Heading>
-        <CabinTableOperations />
-      </Row>
 
-      <Row>
-        <CabinTable />
-        <AddCabin />
-      </Row>
-    </> */
-}

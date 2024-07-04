@@ -6,9 +6,13 @@ import Empty from "../../ui/Empty";
 import Spinner from "../../ui/Spinner";
 import Pagination from "../../ui/Pagination";
 import { useBookings } from "./useBookings";
+import { useBookingPrefetch } from "./useBookingPrefetch";
 
 function BookingTable() {
   const { bookings, isLoading, count } = useBookings();
+
+  // Prefetching data for the booking form
+  useBookingPrefetch();
 
   if (!bookings?.length) return <Empty resourceName={"Bookings"} />;
 

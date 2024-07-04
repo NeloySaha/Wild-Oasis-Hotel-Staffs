@@ -133,7 +133,6 @@ function CreateCabinForm({ cabinToEdit = {}, closeModal }) {
       <FormRow error={errors?.description?.message} label="Description">
         <Textarea
           disabled={isWorking}
-          type="number"
           id="description"
           placeholder="Luxurious and Cozy"
           defaultValue=""

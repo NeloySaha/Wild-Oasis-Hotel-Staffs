@@ -12,6 +12,7 @@ const FormSelect = styled.select`
   background-color: var(--color-grey-0);
   font-weight: 500;
   box-shadow: var(--shadow-sm);
+  width: 100%;
 `;
 
 export default FormSelect;

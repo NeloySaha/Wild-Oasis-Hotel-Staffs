@@ -15,8 +15,6 @@ function GuestForm({ guestToEdit = {}, closeModal }) {
   const { createGuestMutate, isAdding } = useCreateGuest();
   const { editGuestMutate, isEditing } = useEditGuest();
 
-  //   const { createCabinMutate, isAdding } = useCreateCabin();
-  //   const { editCabinMutate, isEditing } = useEditCabin();
   const {
     handleSubmit,
     register,
@@ -117,7 +115,11 @@ function GuestForm({ guestToEdit = {}, closeModal }) {
       </FormRow>
 
       <FormRow label="Nationality" error={errors?.nationality?.message}>
-        <FormSelect defaultValues="Afghanistan" {...register("nationality")}>
+        <FormSelect
+          id="nationality"
+          defaultValues="Afghanistan"
+          {...register("nationality")}
+        >
           {Object.keys(countryInfo).map((countryName) => (
             <option key={countryName} value={countryName}>
               {countryName}

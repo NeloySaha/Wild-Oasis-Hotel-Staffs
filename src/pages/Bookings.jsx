@@ -1,3 +1,4 @@
+import AddBooking from "../features/bookings/AddBooking";
 import BookingTable from "../features/bookings/BookingTable";
 import BookingTableOperations from "../features/bookings/BookingTableOperations";
 import Heading from "../ui/Heading";
@@ -11,7 +12,10 @@ function Bookings() {
         <BookingTableOperations />
       </Row>
 
-      <BookingTable />
+      <Row>
+        <BookingTable />
+        <AddBooking />
+      </Row>
     </>
   );
 }

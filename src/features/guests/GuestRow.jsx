@@ -14,6 +14,13 @@ const GuestName = styled.div`
   font-family: "Sono";
 `;
 
+const GuestId = styled.div`
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-grey-600);
+  font-family: "Sono";
+`;
+
 const NationalId = styled.div`
   font-size: 1.4rem;
   font-weight: 500;
@@ -58,6 +65,7 @@ function GuestRow({ guest }) {
   return (
     <>
       <Table.Row>
+        <GuestId>{guestId}</GuestId>
         <GuestName>{fullName}</GuestName>
         <NationalId>{nationalID}</NationalId>
 
