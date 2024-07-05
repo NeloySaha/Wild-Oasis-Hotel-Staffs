@@ -1,1 +1,2 @@
 export const PAGE_CONTENT_AMOUNT = 10;
+export const BOOKING_PAGE_CONTENT_AMOUNT = 8;

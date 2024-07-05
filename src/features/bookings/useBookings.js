@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getBookings } from "../../services/apiBookings";
 import { useSearchParams } from "react-router-dom";
-import { PAGE_CONTENT_AMOUNT } from "../../utils/constants";
+import { BOOKING_PAGE_CONTENT_AMOUNT } from "../../utils/constants";
 
 export const useBookings = () => {
   const queryClient = useQueryClient();
@@ -33,7 +33,7 @@ export const useBookings = () => {
   });
 
   // PRE-FETCHING
-  const pageCount = Math.ceil(count / PAGE_CONTENT_AMOUNT);
+  const pageCount = Math.ceil(count / BOOKING_PAGE_CONTENT_AMOUNT);
 
   if (page < pageCount)
     queryClient.prefetchQuery({

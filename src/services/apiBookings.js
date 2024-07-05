@@ -1,4 +1,4 @@
-import { PAGE_CONTENT_AMOUNT } from "../utils/constants";
+import { BOOKING_PAGE_CONTENT_AMOUNT } from "../utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
@@ -6,7 +6,7 @@ export async function getBookings({ filter, sortBy, page }) {
   let query = supabase
     .from("bookings")
     .select(
-      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)",
+      `id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabinPrice, extrasPrice, observations, hasBreakfast, isPaid, cabins(name,id), guests(fullName, email,id)`,
       { count: "exact" }
     );
 
@@ -19,8 +19,8 @@ export async function getBookings({ filter, sortBy, page }) {
 
   //pagination
   if (page) {
-    const from = (page - 1) * PAGE_CONTENT_AMOUNT;
-    const to = page * PAGE_CONTENT_AMOUNT - 1;
+    const from = (page - 1) * BOOKING_PAGE_CONTENT_AMOUNT;
+    const to = page * BOOKING_PAGE_CONTENT_AMOUNT - 1;
 
     query = query.range(from, to);
   }
@@ -140,5 +140,20 @@ export async function createBooking(newBookingObj) {
     console.error(error);
     throw new Error("Booking could not be created");
   }
+  return data;
+}
+
+export async function editBooking({ editId, editedBookingObj }) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .update(editedBookingObj)
+    .eq("id", editId)
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be edited");
+  }
+
   return data;
 }

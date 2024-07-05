@@ -1,7 +1,10 @@
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { PAGE_CONTENT_AMOUNT } from "../utils/constants";
+import {
+  BOOKING_PAGE_CONTENT_AMOUNT,
+  PAGE_CONTENT_AMOUNT,
+} from "../utils/constants";
 
 const StyledPagination = styled.div`
   width: 100%;
@@ -59,13 +62,16 @@ const PaginationButton = styled.button`
   }
 `;
 
-function Pagination({ count }) {
+function Pagination({ count, bookingPage = false }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = !searchParams.get("page")
     ? 1
     : Number(searchParams.get("page"));
 
-  const pageCount = Math.ceil(count / PAGE_CONTENT_AMOUNT);
+  const pageContentAmount = bookingPage
+    ? BOOKING_PAGE_CONTENT_AMOUNT
+    : PAGE_CONTENT_AMOUNT;
+  const pageCount = Math.ceil(count / pageContentAmount);
 
   function updateSearchParams(newPage) {
     searchParams.set("page", newPage);
@@ -87,11 +93,9 @@ function Pagination({ count }) {
   return (
     <StyledPagination>
       <P>
-        Showing <span>{(currentPage - 1) * PAGE_CONTENT_AMOUNT + 1}</span> to{" "}
+        Showing <span>{(currentPage - 1) * pageContentAmount + 1}</span> to{" "}
         <span>
-          {currentPage === pageCount
-            ? count
-            : currentPage * PAGE_CONTENT_AMOUNT}
+          {currentPage === pageCount ? count : currentPage * pageContentAmount}
         </span>{" "}
         of <span>{count}</span> results
       </P>

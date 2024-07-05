@@ -11,6 +11,7 @@ import {
   HiArrowDownOnSquare,
   HiArrowUpOnSquare,
   HiEye,
+  HiPencil,
   HiTrash,
 } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +19,7 @@ import { useCheckout } from "../check-in-out/useCheckout";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useDeleteBooking } from "./useDeleteBooking";
+import CreateBookingForm from "./CreateBookingForm";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -46,20 +48,18 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-function BookingRow({
-  booking: {
+function BookingRow({ booking }) {
+  const {
     id: bookingId,
-    created_at,
     startDate,
     endDate,
     numNights,
-    numGuests,
     totalPrice,
     status,
     guests: { fullName: guestName, email },
     cabins: { name: cabinName },
-  },
-}) {
+  } = booking || {};
+
   const { checkOut, isCheckingOut } = useCheckout();
   const { deleteBookingMutate, isDeleting } = useDeleteBooking();
   const navigate = useNavigate();
@@ -101,6 +101,10 @@ function BookingRow({
           <Menus.Toggle id={bookingId} />
 
           <Menus.List id={bookingId}>
+            <Modal.Open opens="edit-booking">
+              <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+            </Modal.Open>
+
             <Menus.Button
               icon={<HiEye />}
               onClick={() => navigate(`/bookings/${bookingId}`)}
@@ -133,6 +137,10 @@ function BookingRow({
               </Modal.Open>
             )}
           </Menus.List>
+
+          <Modal.Window name="edit-booking">
+            <CreateBookingForm bookingToEdit={booking} />
+          </Modal.Window>
 
           <Modal.Window name="deleteBooking">
             <ConfirmDelete
