@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import LoginForm from "../features/authentication/LoginForm";
 import Logo from "../ui/Logo";
 import Heading from "../ui/Heading";
 import { Link } from "react-router-dom";
+import SignupForm from "../features/authentication/SignupForm";
 
 const LoginLayout = styled.main`
   min-height: 100vh;
@@ -14,7 +14,7 @@ const LoginLayout = styled.main`
   background-color: var(--color-grey-50);
 `;
 
-const SignUpText = styled.div`
+const LoginText = styled.div`
   justify-self: center;
   font-size: 1.2rem;
   font-weight: 400;
@@ -35,20 +35,20 @@ const StyledLink = styled(Link)`
   }
 `;
 
-function Login() {
+function Signup() {
   return (
     <>
       <LoginLayout>
         <Logo />
-        <Heading as="h4">Sign in to your account</Heading>
-        <LoginForm />
-        <SignUpText>
-          <p>Don&apos;t have an account?</p>
-          <StyledLink to="/signup">Sign up</StyledLink>
-        </SignUpText>
+        <Heading as="h4">Create a Wild Oasis account</Heading>
+        <SignupForm />
+        <LoginText>
+          <p>Already have an account?</p>
+          <StyledLink to="/login">Sign in</StyledLink>
+        </LoginText>
       </LoginLayout>
     </>
   );
 }
 
-export default Login;
+export default Signup;

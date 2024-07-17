@@ -1,9 +1,12 @@
 import { useForm } from "react-hook-form";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
-import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import { useSignup } from "./useSignup";
+import FormRowVertical from "../../ui/FormRowVertical";
+import PasswordInput from "../../ui/PasswordInput";
+import { useState } from "react";
+import SpinnerMini from "../../ui/SpinnerMini";
 
 // Email regex: /\S+@\S+\.\S+/
 
@@ -15,6 +18,8 @@ function SignupForm() {
     getValues,
     handleSubmit,
   } = useForm();
+  const [passView, setPassView] = useState(false);
+  const [repeatPassView, setRepeatPassView] = useState(false);
 
   const { signUpMutation, isLoading } = useSignup();
 
@@ -29,7 +34,7 @@ function SignupForm() {
 
   return (
     <Form onSubmit={handleSubmit(handleSignUp)}>
-      <FormRow label="Full name" error={errors?.fullName?.message}>
+      <FormRowVertical label="Full name" error={errors?.fullName?.message}>
         <Input
           type="text"
           id="fullName"
@@ -37,11 +42,11 @@ function SignupForm() {
           {...register("fullName", {
             required: "This field is required",
           })}
-          placeholder="Jon Snow"
+          placeholder="Daemon Targaryen"
         />
-      </FormRow>
+      </FormRowVertical>
 
-      <FormRow label="Email address" error={errors?.email?.message}>
+      <FormRowVertical label="Email address" error={errors?.email?.message}>
         <Input
           type="email"
           id="email"
@@ -53,16 +58,19 @@ function SignupForm() {
               message: "Please provide a valid email address",
             },
           })}
-          placeholder="user@example.com"
+          placeholder="daemon@gmail.com"
         />
-      </FormRow>
+      </FormRowVertical>
 
-      <FormRow
+      <FormRowVertical
         label="Password (min 8 characters)"
         error={errors?.password?.message}
+        password={true}
+        passView={passView}
+        setPassView={setPassView}
       >
-        <Input
-          type="password"
+        <PasswordInput
+          type={passView ? "text" : "password"}
           id="password"
           disabled={isLoading}
           placeholder="e.g.: lajkshdkj12_$#@!"
@@ -74,11 +82,17 @@ function SignupForm() {
             },
           })}
         />
-      </FormRow>
+      </FormRowVertical>
 
-      <FormRow label="Repeat password" error={errors?.passwordConfirm?.message}>
-        <Input
-          type="password"
+      <FormRowVertical
+        label="Repeat password"
+        error={errors?.passwordConfirm?.message}
+        password={true}
+        passView={repeatPassView}
+        setPassView={setRepeatPassView}
+      >
+        <PasswordInput
+          type={repeatPassView ? "text" : "password"}
           id="passwordConfirm"
           disabled={isLoading}
           placeholder="e.g.: lajkshdkj12_$#@!"
@@ -89,20 +103,13 @@ function SignupForm() {
               "Passwords need to match",
           })}
         />
-      </FormRow>
+      </FormRowVertical>
 
-      <FormRow>
-        {/* type is an HTML attribute! */}
-        <Button
-          variation="secondary"
-          type="reset"
-          disabled={isLoading}
-          onClick={reset}
-        >
-          Cancel
+      <FormRowVertical>
+        <Button size="large" disabled={isLoading}>
+          {!isLoading ? "Sign up" : <SpinnerMini />}
         </Button>
-        <Button disabled={isLoading}>Create new user</Button>
-      </FormRow>
+      </FormRowVertical>
     </Form>
   );
 }

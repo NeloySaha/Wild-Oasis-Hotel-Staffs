@@ -2,12 +2,15 @@ import { useForm } from "react-hook-form";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
-import Input from "../../ui/Input";
 import { useUpdateUser } from "./useUpdateUser";
+import PasswordInput from "../../ui/PasswordInput";
+import { useState } from "react";
 
 function UpdatePasswordForm() {
   const { register, handleSubmit, formState, getValues, reset } = useForm();
   const { errors } = formState;
+  const [passView, setPassView] = useState(false);
+  const [confirmPassView, setConfirmPassView] = useState(false);
 
   const { editUserMutation, isUpdating } = useUpdateUser();
 
@@ -20,9 +23,12 @@ function UpdatePasswordForm() {
       <FormRow
         label="New Password (min 8 characters)"
         error={errors?.password?.message}
+        password={true}
+        setPassView={setPassView}
+        passView={passView}
       >
-        <Input
-          type="password"
+        <PasswordInput
+          type={passView ? "text" : "password"}
           id="password"
           autoComplete="current-password"
           placeholder="e.g.: lajkshdkj12_$#@!"
@@ -40,9 +46,12 @@ function UpdatePasswordForm() {
       <FormRow
         label="Confirm password"
         error={errors?.passwordConfirm?.message}
+        password={true}
+        setPassView={setConfirmPassView}
+        passView={confirmPassView}
       >
-        <Input
-          type="password"
+        <PasswordInput
+          type={confirmPassView ? "text" : "password"}
           autoComplete="new-password"
           placeholder="e.g.: lajkshdkj12_$#@!"
           id="passwordConfirm"

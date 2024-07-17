@@ -7,7 +7,7 @@ export const useSignup = () => {
     mutationFn: signUp,
     onSuccess: () => {
       toast.success(
-        "New Account created successfully! Please, verify the new account from the user's email address"
+        "New Account created successfully! Please, check your email to verify your account"
       );
     },
   });
