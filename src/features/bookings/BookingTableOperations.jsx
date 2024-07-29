@@ -1,6 +1,7 @@
 import SortBy from "../../ui/SortBy";
 import Filter from "../../ui/Filter";
 import TableOperations from "../../ui/TableOperations";
+import CabinFilter from "../../ui/CabinFilter";
 
 function BookingTableOperations() {
   return (
@@ -14,6 +15,8 @@ function BookingTableOperations() {
           { value: "unconfirmed", label: "Unconfirmed" },
         ]}
       />
+
+      <CabinFilter />
 
       <SortBy
         options={[

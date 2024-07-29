@@ -2,7 +2,7 @@ import { BOOKING_PAGE_CONTENT_AMOUNT } from "../utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings({ filter, sortBy, page }) {
+export async function getBookings({ filter, cabinFilter, sortBy, page }) {
   let query = supabase
     .from("bookings")
     .select(
@@ -12,6 +12,9 @@ export async function getBookings({ filter, sortBy, page }) {
 
   // filter
   if (filter) query = query.eq(filter.field, filter.value);
+
+  // cabinFilter
+  if (cabinFilter) query.eq(cabinFilter.field, cabinFilter.value);
 
   // sort
   if (sortBy)

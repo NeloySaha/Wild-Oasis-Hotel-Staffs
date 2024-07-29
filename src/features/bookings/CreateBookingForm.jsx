@@ -2,8 +2,6 @@ import { differenceInDays } from "date-fns";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
-import Form from "../../ui/Form";
-import FormRow from "../../ui/FormRow";
 import { useCabins } from "../cabins/useCabins";
 import FormSelect from "../../ui/FormSelect";
 import Button from "../../ui/Button";
@@ -14,6 +12,17 @@ import Textarea from "../../ui/Textarea";
 import { useSettings } from "../settings/useSettings";
 import { useCreateBooking } from "./useCreateBooking";
 import { useEditBooking } from "./useEditBooking";
+import BookingForm from "../../ui/BookingForm";
+import BookingFormRow from "../../ui/BookingFormRow";
+import styled from "styled-components";
+
+const ButtonContainer = styled.div`
+  padding-top: 1.6rem;
+  display: flex;
+  justify-content: end;
+  gap: 2.4rem;
+  grid-column: 1/-1;
+`;
 
 function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
   const { id: editBookingId, ...primaryValues } = bookingToEdit;
@@ -43,6 +52,7 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
       observations: "",
       cabinPrice: 0,
       extrasPrice: 0,
+      totalPrice: 0,
       hasBreakfast: "No",
       isPaid: "No",
     };
@@ -59,6 +69,7 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
       guestId: primaryValues.guests.id,
       hasBreakfast: primaryValues.hasBreakfast ? "Yes" : "No",
       isPaid: primaryValues.isPaid ? "Yes" : "No",
+      totalPrice: primaryValues.totalPrice,
     };
   }
 
@@ -84,10 +95,8 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
       extrasPrice: extraPrice,
       hasBreakfast: data.hasBreakfast === "Yes",
       isPaid: data.isPaid === "Yes",
-      totalPrice: extraPrice + data.cabinPrice,
       status: "unconfirmed",
     };
-    console.log(bookingObj);
 
     if (isEditSession) {
       editEditBookingMutate(
@@ -111,6 +120,24 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
+      if (name === "cabinPrice" || name === "extrasPrice") {
+        const selectedCabin = cabins.find(
+          (cabin) => cabin.id === Number(value.cabinId)
+        );
+
+        const cabinPrice =
+          value.numNights *
+          (selectedCabin.regularPrice - selectedCabin.discount);
+
+        const extrasPrice =
+          value.hasBreakfast === "Yes"
+            ? value.numNights * breakfastPrice * value.numGuests
+            : 0;
+
+        setValue("totalPrice", cabinPrice + extrasPrice);
+        return;
+      }
+
       if (
         name === "hasBreakfast" ||
         name === "numGuests" ||
@@ -148,11 +175,11 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
   }, [watch, setValue, cabins, breakfastPrice]);
 
   return (
-    <Form
+    <BookingForm
       onSubmit={handleSubmit(onSubmit)}
       type={closeModal ? "modal" : "regular"}
     >
-      <FormRow error={errors?.cabinId?.message} label="Cabin">
+      <BookingFormRow error={errors?.cabinId?.message} label="Cabin">
         {isCabinLoading ? (
           <SpinnerMini />
         ) : (
@@ -168,9 +195,9 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
             ))}
           </FormSelect>
         )}
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow error={errors?.guestId?.message} label="Booked by guest">
+      <BookingFormRow error={errors?.guestId?.message} label="Booked by guest">
         {isGuestLoading ? (
           <SpinnerMini />
         ) : (
@@ -186,9 +213,12 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
             ))}
           </FormSelect>
         )}
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow label="Booking Start Date" error={errors?.startDate?.message}>
+      <BookingFormRow
+        label="Booking Start Date"
+        error={errors?.startDate?.message}
+      >
         <Input
           disabled={isWorking}
           type="date"
@@ -197,9 +227,9 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
             required: "This field is required",
           })}
         />
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow label="Booking End Date" error={errors?.endDate?.message}>
+      <BookingFormRow label="Booking End Date" error={errors?.endDate?.message}>
         <Input
           disabled={isWorking}
           type="date"
@@ -208,9 +238,9 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
             required: "This field is required",
           })}
         />
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow label="No. of Nights" error={errors?.numNights?.message}>
+      <BookingFormRow label="No. of Nights" error={errors?.numNights?.message}>
         <Input
           type="number"
           id="numNights"
@@ -229,9 +259,9 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
             },
           })}
         />
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow label="No. of Guests" error={errors?.numGuests?.message}>
+      <BookingFormRow label="No. of Guests" error={errors?.numGuests?.message}>
         <Input
           disabled={isWorking}
           type="number"
@@ -259,9 +289,9 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
             },
           })}
         />
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow label="Breakfast" error={errors?.hasBreakfast?.message}>
+      <BookingFormRow label="Breakfast" error={errors?.hasBreakfast?.message}>
         <FormSelect
           disabled={isWorking}
           id="hasBreakfast"
@@ -270,18 +300,18 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
           <option value={"No"}>No</option>
           <option value={"Yes"}>Yes</option>
         </FormSelect>
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow label="Observations">
+      <BookingFormRow label="Observations">
         <Textarea
           disabled={isWorking}
           id="observations"
           placeholder="e.g.: I will arrive late"
           {...register("observations")}
         />
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow label="Cabin Price" error={errors?.cabinPrice?.message}>
+      <BookingFormRow label="Cabin Price" error={errors?.cabinPrice?.message}>
         <Input
           type="number"
           id="cabinPrice"
@@ -290,25 +320,34 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
             required: "This field is required",
           })}
         />
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow label="Extras Price" error={errors?.extrasPrice?.message}>
+      <BookingFormRow label="Extras Price" error={errors?.extrasPrice?.message}>
         <Input
           type="number"
           id="extrasPrice"
           disabled={true}
           {...register("extrasPrice")}
         />
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow label="Payment Status" error={errors?.isPaid?.message}>
+      <BookingFormRow label="Payment Status" error={errors?.isPaid?.message}>
         <FormSelect disabled={isWorking} id="isPaid" {...register("isPaid")}>
           <option value={"No"}>No</option>
           <option value={"Yes"}>Yes</option>
         </FormSelect>
-      </FormRow>
+      </BookingFormRow>
 
-      <FormRow>
+      <BookingFormRow label="Total Price">
+        <Input
+          type="number"
+          id="totalPrice"
+          disabled={true}
+          {...register("totalPrice")}
+        />
+      </BookingFormRow>
+
+      <ButtonContainer>
         <Button
           variation="secondary"
           type="reset"
@@ -321,8 +360,8 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
         <Button disabled={isWorking}>
           {isEditSession ? "Edit Booking" : "Create new Booking"}
         </Button>
-      </FormRow>
-    </Form>
+      </ButtonContainer>
+    </BookingForm>
   );
 }
 
