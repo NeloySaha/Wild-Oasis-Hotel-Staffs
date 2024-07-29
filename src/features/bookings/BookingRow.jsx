@@ -101,9 +101,11 @@ function BookingRow({ booking }) {
           <Menus.Toggle id={bookingId} />
 
           <Menus.List id={bookingId}>
-            <Modal.Open opens="edit-booking">
-              <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
-            </Modal.Open>
+            {status !== "checked-out" && (
+              <Modal.Open opens="edit-booking">
+                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              </Modal.Open>
+            )}
 
             <Menus.Button
               icon={<HiEye />}

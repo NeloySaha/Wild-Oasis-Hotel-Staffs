@@ -70,6 +70,7 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
       hasBreakfast: primaryValues.hasBreakfast ? "Yes" : "No",
       isPaid: primaryValues.isPaid ? "Yes" : "No",
       totalPrice: primaryValues.totalPrice,
+      status: primaryValues.status,
     };
   }
 
@@ -95,7 +96,7 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
       extrasPrice: extraPrice,
       hasBreakfast: data.hasBreakfast === "Yes",
       isPaid: data.isPaid === "Yes",
-      status: "unconfirmed",
+      status: isEditSession ? data.status : "unconfirmed",
     };
 
     if (isEditSession) {
