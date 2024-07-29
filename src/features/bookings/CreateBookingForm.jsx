@@ -17,10 +17,10 @@ import BookingFormRow from "../../ui/BookingFormRow";
 import styled from "styled-components";
 
 const ButtonContainer = styled.div`
-  padding-top: 1.6rem;
+  padding-top: 24px;
   display: flex;
   justify-content: end;
-  gap: 2.4rem;
+  gap: 36px;
   grid-column: 1/-1;
 `;
 
@@ -176,10 +176,7 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
   }, [watch, setValue, cabins, breakfastPrice]);
 
   return (
-    <BookingForm
-      onSubmit={handleSubmit(onSubmit)}
-      type={closeModal ? "modal" : "regular"}
-    >
+    <BookingForm onSubmit={handleSubmit(onSubmit)}>
       <BookingFormRow error={errors?.cabinId?.message} label="Cabin">
         {isCabinLoading ? (
           <SpinnerMini />
@@ -198,7 +195,7 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
         )}
       </BookingFormRow>
 
-      <BookingFormRow error={errors?.guestId?.message} label="Booked by guest">
+      <BookingFormRow error={errors?.guestId?.message} label="Guest">
         {isGuestLoading ? (
           <SpinnerMini />
         ) : (
@@ -216,10 +213,7 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
         )}
       </BookingFormRow>
 
-      <BookingFormRow
-        label="Booking Start Date"
-        error={errors?.startDate?.message}
-      >
+      <BookingFormRow label="From" error={errors?.startDate?.message}>
         <Input
           disabled={isWorking}
           type="date"
@@ -230,7 +224,7 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
         />
       </BookingFormRow>
 
-      <BookingFormRow label="Booking End Date" error={errors?.endDate?.message}>
+      <BookingFormRow label="To" error={errors?.endDate?.message}>
         <Input
           disabled={isWorking}
           type="date"
@@ -303,7 +297,7 @@ function CreateBookingForm({ bookingToEdit = {}, closeModal }) {
         </FormSelect>
       </BookingFormRow>
 
-      <BookingFormRow label="Observations">
+      <BookingFormRow label="Anything to note?">
         <Textarea
           disabled={isWorking}
           id="observations"

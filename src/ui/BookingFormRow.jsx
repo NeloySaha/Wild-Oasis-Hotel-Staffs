@@ -4,12 +4,10 @@ import styled from "styled-components";
 const StyledFormRow = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 16rem 1fr;
-  row-gap: 0.6rem;
-  /* gap: 2.4rem; */
+  grid-template-columns: 14rem 24rem;
 
-  padding: 1.2rem 0;
-
+  padding: 1.4rem 0;
+  border-bottom: 1px solid var(--color-grey-100);
   &:has(button) {
     display: flex;
     justify-content: flex-end;
