@@ -81,18 +81,14 @@ function GuestForm({ guestToEdit = {}, closeModal }) {
       <FormRow error={errors?.nationalID?.message} label="National ID">
         <Input
           disabled={isWorking}
-          type="number"
+          type="text"
           id="nationalID"
-          placeholder="4623131131"
+          placeholder="462313A13B"
           {...register("nationalID", {
             required: "This field is required",
-            minLength: {
-              value: 10,
-              message: "NID shouldn't contain less than 10 digits",
-            },
-            maxLength: {
-              value: 10,
-              message: "NID shouldn't contain more than 10 digits",
+            pattern: {
+              value: /^[a-zA-Z0-9]{6,12}$/,
+              message: "Please provide a valid national ID",
             },
           })}
         />

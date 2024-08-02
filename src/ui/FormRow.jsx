@@ -4,8 +4,9 @@ import styled from "styled-components";
 const StyledFormRow = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 24rem 1fr 0.4fr;
-  gap: 2.4rem;
+  grid-template-columns: 24rem 0.8fr;
+  column-gap: 2.4rem;
+  row-gap: 0.6rem;
 
   padding: 1.2rem 0;
 
@@ -33,6 +34,7 @@ const Label = styled.label`
 `;
 
 const Error = styled.span`
+  grid-column: 2/-1;
   font-size: 1.4rem;
   color: var(--color-red-700);
 `;
