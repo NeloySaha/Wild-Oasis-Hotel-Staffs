@@ -23,7 +23,7 @@ import Signup from "./pages/Signup";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 0,
+      staleTime: 3600000,
     },
   },
 });
